@@ -22,6 +22,7 @@ provider:
     TODO_INDEX_TABLE: TODO-Index
     IMAGES_S3_BUCKET: jit-serverless-projectt-images-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
+    AUTH_0_SECRET: NayJLLs0lzAcSU_Ix9DTQyM8QQLQbbEAeRMOlezXKfUzyQ7oCniqd_MW28DvaxGV
   
   iamRoleStatements:
     - Effect: Allow
