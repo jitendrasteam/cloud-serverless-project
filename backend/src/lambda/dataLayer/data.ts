@@ -86,5 +86,13 @@ export class Data {
           }).promise()
         return result
     }
+
+    async updateS3Url(newItem){
+       return await this.docClient.put({
+            TableName: this.toDoTable,
+            Item: newItem
+          }).promise()
+    }
+   
 }
 
