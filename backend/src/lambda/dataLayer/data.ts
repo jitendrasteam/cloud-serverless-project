@@ -75,4 +75,16 @@ export class Data {
             }
         }).promise();
         return item;
-    }}
+    }
+    async getAllTodo(userId){
+        const result = await this.docClient.query({
+            TableName: this.toDoTable,
+            KeyConditionExpression: 'userId = :userId',
+            ExpressionAttributeValues: {
+              ':userId' : userId
+            }
+          }).promise()
+        return result
+    }
+}
+

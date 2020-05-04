@@ -36,3 +36,8 @@ export async function deleteTodo(todoId,userId){
     let deleted = await data.deleteToDo(todoId,userId);
     return deleted
 }
+
+export async function getAllTodo(userId){
+    let items = await data.getAllTodo(userId)
+    return items.Items
+}
