@@ -6,9 +6,6 @@ const XAWS = AWSXRay.captureAWS(AWS)
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { TodoUpdate } from '../../models/TodoUpdate'
 
-
-
-
 export class Data {
 
     constructor(
@@ -51,4 +48,11 @@ export class Data {
             return todoUpdate
     }
 
+    async createToDo(newItem) {
+       let data = await this.docClient.put({
+            TableName: this.toDoTable,
+            Item: newItem
+        }).promise()
+        return newItem;
+    }
 }
