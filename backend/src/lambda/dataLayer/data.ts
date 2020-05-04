@@ -49,10 +49,30 @@ export class Data {
     }
 
     async createToDo(newItem) {
-       let data = await this.docClient.put({
+        await this.docClient.put({
             TableName: this.toDoTable,
             Item: newItem
         }).promise()
         return newItem;
     }
-}
+
+    async getToDoById(todoId,userId){
+        const item = await this.docClient.get({
+            TableName: this.toDoTable,
+            Key: {
+                todoId: todoId,
+                userId: userId
+            }
+        }).promise()
+        return item;
+    }
+    async deleteToDo(todoId,userId){  
+        const item = await this.docClient.delete({
+            TableName: this.toDoTable,
+            Key: {
+                todoId: todoId,
+                userId: userId
+            }
+        }).promise();
+        return item;
+    }}

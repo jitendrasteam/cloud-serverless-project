@@ -1,12 +1,9 @@
 import 'source-map-support/register'
-import * as AWS from 'aws-sdk'
 
 import { APIGatewayProxyEvent, APIGatewayProxyResult, APIGatewayProxyHandler } from 'aws-lambda'
 import { parseUserId } from '../../auth/utils'
+import {deleteTodo} from '../logicLayer/todo'
 
-
-const docClient = new AWS.DynamoDB.DocumentClient()
-const toDoTable = process.env.TODO_TABLE
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const todoId = event.pathParameters.todoId
@@ -16,15 +13,9 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   const jwtToken = split[1]
   const userId = parseUserId(jwtToken)
 
-  const itemToUpdate = await docClient.get({
-      TableName: toDoTable,
-      Key: {
-          todoId: todoId,
-          userId: userId
-      }
-  }).promise()
+  const deleted = await deleteTodo(todoId,userId)
 
-  if (!itemToUpdate.Item){
+  if (deleted === null){
     return {
         statusCode: 404,
         body: JSON.stringify({
@@ -32,15 +23,6 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
         })
     }
   }
-
-  await docClient.delete({
-      TableName: toDoTable,
-      Key: {
-          todoId: todoId,
-          userId: userId
-      }
-  }).promise()
-  
   return {
       statusCode: 204,
       headers: {
