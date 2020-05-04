@@ -5,6 +5,7 @@ const XAWS = AWSXRay.captureAWS(AWS)
 
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { TodoUpdate } from '../../models/TodoUpdate'
+import { TodoItem } from '../../models/TodoItem';
 
 export class Data {
 
@@ -48,7 +49,7 @@ export class Data {
             return todoUpdate
     }
 
-    async createToDo(newItem) {
+    async createToDo(newItem:TodoItem):Promise<TodoItem> {
         await this.docClient.put({
             TableName: this.toDoTable,
             Item: newItem
@@ -56,7 +57,7 @@ export class Data {
         return newItem;
     }
 
-    async getToDoById(todoId,userId){
+    async getToDoById(todoId:string,userId:string):Promise<any>{
         const item = await this.docClient.get({
             TableName: this.toDoTable,
             Key: {
@@ -66,7 +67,7 @@ export class Data {
         }).promise()
         return item;
     }
-    async deleteToDo(todoId,userId){  
+    async deleteToDo(todoId:string,userId:string):Promise<any>{  
         const item = await this.docClient.delete({
             TableName: this.toDoTable,
             Key: {
@@ -76,7 +77,7 @@ export class Data {
         }).promise();
         return item;
     }
-    async getAllTodo(userId){
+    async getAllTodo(userId:string):Promise<any>{
         const result = await this.docClient.query({
             TableName: this.toDoTable,
             KeyConditionExpression: 'userId = :userId',
@@ -87,11 +88,12 @@ export class Data {
         return result
     }
 
-    async updateS3Url(newItem){
-       return await this.docClient.put({
+    async updateTodo(newItem:TodoItem):Promise<any>{
+        let updated = await this.docClient.put({
             TableName: this.toDoTable,
             Item: newItem
           }).promise()
+        return updated
     }
    
 }
